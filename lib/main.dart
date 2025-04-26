@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
-import 'package:lab3/import_manager.dart';
+import 'package:lab3/pages/pages_manager.dart';
 
 void main() {
   runApp(const MyApp());
