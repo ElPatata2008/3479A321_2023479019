@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lab3/providers/app_data_provider.dart';
 import 'package:lab3/widgets/footer.dart';
 import 'package:logger/logger.dart';
 import 'package:lab3/pages/pages_manager.dart';
+import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -10,22 +12,18 @@ class MyHomePage extends StatefulWidget {
   final String title;
   
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() {
+    print("createState()");
+    return _MyHomePageState();
+  }
 }
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  int _counter = 0;
   String clickAssetImg = "assets/icons/click.svg";
 
-  void _incrementCounter() { setState(() { _counter++; }); }
-
-  void _decrementCounter() { setState(() { _counter--; }); }
-
-  void _resetCounter() { setState(() { _counter = 0; }); }
-
   void _pageCheck() {
-    if (_counter % 2 == 0) {
+    if (context.read<AppData>().counter % 2 == 0) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => const ListContent()));
     } else {
       Navigator.push(context, MaterialPageRoute(builder: (context) => const About()));
@@ -33,15 +31,52 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void initState() {
+    print("iniState() called");
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    print("didChangeDependencies() called");
+    super.didChangeDependencies();
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    context.read<AppData>().counter;
+    super.setState(fn);
+  }
+
+  @override
+  void deactivate() {
+    print("deactivate() called");
+    super.deactivate();
+  }
+
+  @override
+  void dispose() {
+    print("dispose() called");
+    super.dispose();
+  }
+
+  @override
+  void reassemble() {
+    print("reassemble() called");
+    context.read<AppData>().counter;
+    super.reassemble();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var logger = Logger();
-    logger.d("Logger is working in MyHomePage!");
+    // var logger = Logger();
+    // logger.d("Logger is working in MyHomePage!");
     
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.amber,
-          title: Text( 'Laboratorio 5: Navegación',
+          title: Text( 'Laboratorio 6: Providers',
             textAlign: TextAlign.center,
           ),
         ),
@@ -51,6 +86,13 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                Text("Bienvenido/a de nuevo\n ${context.read<AppData>().usuario}",
+                textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 30
+                  ),
+                ),
+                SizedBox(height: 25,),
                 SvgPicture.asset(clickAssetImg, 
                   colorFilter: const ColorFilter.mode(
                     Colors.amberAccent, 
@@ -59,15 +101,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 const Text('Ha presioando el botón esta cantidad de veces:'),
                 Text(
-                  '$_counter',
+                  '${context.read<AppData>().counter}',
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    IconButton(onPressed: _incrementCounter, icon: Icon(Icons.add)),
-                    IconButton(onPressed: _decrementCounter, icon: Icon(Icons.remove)),
-                    IconButton(onPressed: _resetCounter, icon: Icon(Icons.restore)),
+                    IconButton(onPressed: () => setState(context.read<AppData>().incrementCounter), icon: Icon(Icons.add)),
+                    IconButton(onPressed: () => setState(context.read<AppData>().decrementCounter), icon: Icon(Icons.remove)),
+                    // IconButton(onPressed: context.read<AppData>().resetCounter, icon: Icon(Icons.restore)),
                     IconButton(onPressed: _pageCheck, icon: Icon(Icons.arrow_forward_rounded)),
                   ],
                 ),

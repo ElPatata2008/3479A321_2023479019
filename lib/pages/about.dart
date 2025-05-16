@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:lab3/pages/pages_manager.dart';
+import 'package:lab3/providers/app_data_provider.dart';
 import 'package:lab3/widgets/footer.dart';
+import 'package:provider/provider.dart';
 
-class About extends StatelessWidget {
+class About extends StatefulWidget {
   const About({super.key});
 
+  @override
+  State<About> createState() => _AboutState();
+}
+
+class _AboutState extends State<About> {
   final String normalFace = 'assets/imgs/normal.png';
+
+  @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +31,24 @@ class About extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(20),
-              child: Image.asset(normalFace, 
-                height: 100,
-                width: 100,
-              ),
+            Text("Cambiar nombre a:",
+              textAlign: TextAlign.center,
             ),
-            Text("Fire in the hole"),
+            SizedBox(height: 10,),
+            TextButton(
+              child: Text("Juan"),
+              onPressed: () => setState(context.read<AppData>().changeUserToJuan), 
+            ),
+            TextButton(
+              child: Text("Diego"),
+              onPressed: () => setState(context.read<AppData>().changeUserToDiego), 
+            ),
+            TextButton(
+              child: Text("Pedro"),
+              onPressed: () => setState(context.read<AppData>().changeUserToPedro), 
+            ),
+            SizedBox(height: 20,),
+            Text("Contador: ${context.read<AppData>().counter}")
           ],
         )
       ),
