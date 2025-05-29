@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lab3/providers/app_data_provider.dart';
+import 'package:lab3/services/database_helper.dart';
 import 'package:logger/logger.dart';
 import 'package:lab3/pages/pages_manager.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DatabaseHelper().initializeDatabase();
+
   runApp(const MyApp());
 }
 
@@ -23,7 +27,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false, 
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.purple,
+            seedColor: Colors.amberAccent,
             brightness: Brightness.dark,
           ),
           textTheme: TextTheme(
@@ -39,7 +43,10 @@ class MyApp extends StatelessWidget {
             displaySmall: GoogleFonts.pacifico(),
           ),
         ),
-        home: const MyHomePage(title: 'Flutter Demo Home Page'),
+        home: DefaultTabController(
+          length: 3,
+          child: const MyHomePage()
+        ),
       ),
     );
   }

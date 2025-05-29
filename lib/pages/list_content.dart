@@ -26,10 +26,6 @@ class ListContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("List Content"),
-        backgroundColor: Colors.blueAccent,
-      ),
       body: ListView.builder(
         itemCount: elements.length,
         itemBuilder: (context, index) {
@@ -38,13 +34,13 @@ class ListContent extends StatelessWidget {
           );
         },
       ),
-      persistentFooterButtons: [
-        footerButtons([
-          navigationButton(Colors.amberAccent, Colors.yellowAccent, "Home", MyHomePage(title: 'Flutter Demo Page'), true, context),
-          navigationButton(Colors.redAccent, Colors.deepOrangeAccent, "About", About(), false, context),
-        ], 
-        MainAxisAlignment.spaceBetween)
-      ],
+      // persistentFooterButtons: [
+      //   footerButtons([
+      //     navigationButton(Colors.amberAccent, Colors.yellowAccent, "Home", MyHomePage(title: 'Flutter Demo Page'), true, context),
+      //     navigationButton(Colors.redAccent, Colors.deepOrangeAccent, "About", About(), false, context),
+      //   ], 
+      //   MainAxisAlignment.spaceBetween)
+      // ],
     );
   }
 }

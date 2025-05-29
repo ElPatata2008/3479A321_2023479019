@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:lab3/pages/pages_manager.dart';
+import 'package:lab3/pages/preferences.dart';
 import 'package:lab3/providers/app_data_provider.dart';
 import 'package:lab3/widgets/footer.dart';
+import 'package:lab3/widgets/textButton.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class About extends StatefulWidget {
-  const About({super.key});
+  const About({super.key, required this.appBarColor});
+
+  final Color appBarColor;
 
   @override
   State<About> createState() => _AboutState();
@@ -14,19 +19,18 @@ class About extends StatefulWidget {
 class _AboutState extends State<About> {
   final String normalFace = 'assets/imgs/normal.png';
 
-  @override
-  void setState(VoidCallback fn) {
-    super.setState(fn);
-  }
+  bool _isResetEnabled = false;
 
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance(); 
+    setState(() { 
+      _isResetEnabled = prefs.getBool('isResetEnabled') ?? false; 
+    }); 
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("About"),
-        backgroundColor: Colors.redAccent,
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -35,29 +39,39 @@ class _AboutState extends State<About> {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 10,),
-            TextButton(
-              child: Text("Juan"),
-              onPressed: () => setState(context.read<AppData>().changeUserToJuan), 
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                defaultTextButton("Juan", widget.appBarColor, () => setState(context.read<AppData>().changeUserToJuan)),
+                SizedBox(width: 10,),
+                defaultTextButton("Diego", widget.appBarColor, () => setState(context.read<AppData>().changeUserToDiego)),
+                SizedBox(width: 10,),
+                defaultTextButton("Pedro", widget.appBarColor, () => setState(context.read<AppData>().changeUserToPedro)),
+              ],
             ),
+            SizedBox(height: 40,),
+            Text("Contador: ${context.read<AppData>().counter}"),
+            SizedBox(height: 40,),
             TextButton(
-              child: Text("Diego"),
-              onPressed: () => setState(context.read<AppData>().changeUserToDiego), 
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Preferences()
+                )
+              ).then((_) {
+                _loadPreferences();
+              }), 
+              child: Text("Preferencias")
             ),
-            TextButton(
-              child: Text("Pedro"),
-              onPressed: () => setState(context.read<AppData>().changeUserToPedro), 
-            ),
-            SizedBox(height: 20,),
-            Text("Contador: ${context.read<AppData>().counter}")
+
+            TextButton(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Activities())), 
+            child: Text("Actividades"))
           ],
         )
       ),
-      persistentFooterButtons: [
-        footerButtons([
-          navigationButton(Colors.blueAccent, Colors.cyanAccent, "List Content", ListContent(), true, context),
-        ], 
-        MainAxisAlignment.start)
-      ],
+      // persistentFooterButtons: [
+      //   footerButtons([
+      //     navigationButton(Colors.blueAccent, Colors.cyanAccent, "List Content", ListContent(), true, context),
+      //   ], 
+      //   MainAxisAlignment.start)
+      // ],
     );
   }
 }
