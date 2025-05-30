@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:lab3/providers/app_data_provider.dart';
 import 'package:lab3/pages/pages_manager.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +20,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   late TabController _tabController;
   Color _appBarColor = Colors.amberAccent; 
   double t = 0.7;
+  String _imageUrl = 'https://picsum.photos/250?image=0';
   
   String clickAssetImg = "assets/icons/click.svg";
 
@@ -37,6 +40,20 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     }
   }
 
+  void _getNewImage() async {
+    final newImageUrl = 'https://picsum.photos/250?image=${context.read<AppData>().counter}';
+
+    try {
+      final response = await http.head(Uri.parse(newImageUrl));
+      if (response.statusCode == 200 || response.statusCode == 404) {
+        setState(() => _imageUrl = newImageUrl);
+      } else {
+        setState(() => _imageUrl = '');
+      }
+    } catch (e) {
+      setState(() => _imageUrl = '');
+    }
+  }
 
   @override
   void initState() {
@@ -50,11 +67,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     });
   }
 
-  @override
-  void setState(VoidCallback fn) {
-    super.setState(fn);
-    context.read<AppData>().counter;
-  }
+
 
   @override
   void reassemble() {
@@ -72,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: _appBarColor,
-          title: Text( 'Laboratorio 7: Persistencia',
+          title: Text( 'Laboratorio 8: Internet',
             style: TextStyle(
               color: Colors.white
             ),
@@ -107,6 +120,22 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    Image.network(_imageUrl.isNotEmpty ? _imageUrl : '',
+                      width: 250, height: 250,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Center(
+                        child: Text("Failed to load image",
+                          style: TextStyle(
+                            color: Colors.red
+                          ),  
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => _getNewImage(), 
+                      child: Text("Refrescar imagen")
+                    ),
+                    SizedBox(height: 25,),
                     Text("Bienvenido/a de nuevo\n ${context.read<AppData>().usuario}",
                     textAlign: TextAlign.center,
                       style: TextStyle(
