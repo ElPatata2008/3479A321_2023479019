@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lab3/pages/pages_manager.dart';
+import 'package:lab3/pages/picure_list.dart';
 import 'package:lab3/pages/preferences.dart';
 import 'package:lab3/providers/app_data_provider.dart';
 import 'package:lab3/widgets/footer.dart';
@@ -61,8 +62,14 @@ class _AboutState extends State<About> {
               child: Text("Preferencias")
             ),
 
-            TextButton(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Activities())), 
-            child: Text("Actividades"))
+            TextButton(
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Activities())), 
+              child: Text("Actividades"),
+            ),
+            TextButton(
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PictureList())),
+              child: Text("Galería"),
+            )
           ],
         )
       ),
