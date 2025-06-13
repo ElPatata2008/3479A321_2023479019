@@ -95,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: _appBarColor,
-        title: Text( 'Laboratorio 9: Cámara',
+        title: Text( 'Laboratorio 10: Info Aplicación',
           style: TextStyle(
             color: Colors.white
           ),
