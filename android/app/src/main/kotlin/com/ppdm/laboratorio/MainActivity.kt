@@ -1,4 +1,4 @@
-package com.example.lab3
+package com.ppdm.laboratorio
 
 import io.flutter.embedding.android.FlutterActivity
 
